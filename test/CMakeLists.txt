@@ -1,70 +1,35 @@
-list(APPEND TESTS
-    is_substr
-    cpy_str
-    reverse_str
-    supprime_espaces
-    del_substr
-    parentheses
-    substr
-    words
-    matrix
-    lab
-    complex
-    mathad_speed
-    matcopy
-    mathad_copy
-    matcmp_speed
-    computational
-    matcopycol
-    all_mat
-)
+add_executable(t_AbsView t_AbsView.cpp)
+add_executable(t_Matrix t_Matrix.cpp)
+add_executable(t_DiffEq t_DiffEq.cpp)
+add_executable(t_Plot t_Plot.cpp)
+add_executable(t_Quad t_Quad.cpp)
+add_executable(t_Grid t_Grid.cpp)
+add_executable(t_Ejovo t_Ejovo.cpp)
+add_executable(t_Vector t_Vector.cpp)
+add_executable(t_mcmc t_MCMC.cpp)
+add_executable(t_MonteCarlo t_MonteCarlo.cpp)
+add_executable(t_Linear t_Linear.cpp)
 
-list(APPEND TEST_LIBS
-    ejovo
-)
 
-# if (NOT WIN32)
-#     list(APPEND TEST_LIBS m)
-# endif()
+# add_executable(t_Min t_Min.cpp)
 
-list(APPEND TEST_INC
-    ${INC}
-)
-
-# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BIN}/test)
-
-# set(TEST_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}" PARENT_SCOPE)
-
-macro(ejovo_add_test TESTNAME)
-
-    # create an exectuable in which the tests will be stored
-    set(TEST_BIN "test_${TESTNAME}")
-
-    # message(STATUS "Adding test ${TESTNAME}")
-    add_executable(${TEST_BIN} "${TESTNAME}.c")
-    target_link_libraries(${TEST_BIN} ${TEST_LIBS})
-    target_include_directories(${TEST_BIN} PUBLIC ${TEST_INC})
-    target_compile_options(${TEST_BIN} PUBLIC -g)
-    set_target_properties(${TEST_BIN}
-        PROPERTIES
-        # OUTPUT_NAME ${TESTNAME}
-        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    )
-    add_test(${TESTNAME} test_${TESTNAME})
-
-endmacro()
-
-add_subdirectory(matrix)
+target_link_libraries(t_AbsView PUBLIC matrix++)
+target_link_libraries(t_Matrix PUBLIC matrix++)
+target_link_libraries(t_DiffEq PUBLIC matrix++)
+target_link_libraries(t_Plot PUBLIC matrix++)
+target_link_libraries(t_Quad PUBLIC matrix++)
+target_link_libraries(t_Grid PUBLIC matrix++)
+target_link_libraries(t_Ejovo PUBLIC matrix++)
+target_link_libraries(t_Vector PUBLIC matrix++)
+target_link_libraries(t_mcmc PUBLIC matrix++)
+target_link_libraries(t_MonteCarlo PUBLIC matrix++)
+target_link_libraries(t_Linear PUBLIC matrix++)
+# target_link_libraries(t_Min PUBLIC matrix++)
 
 
 
-foreach(T ${TESTS})
-    ejovo_add_test(${T})
-endforeach(T)
 
-# Flags for profiling on local machine
-
-# target_compile_options(test_mathad_speed PUBLIC -pg -g)
-# target_link_options(test_mathad_speed PUBLIC -pg -g)
-# target_compile_options(test_matcmp_speed PUBLIC -pg -g)
-# target_link_options(test_matcmp_speed PUBLIC -pg -g)
+# target_link_libraries(t_Matrix INTERFACE matplot)
+# target_link_libraries(t_Matrix INTERFACE pyth3)
+# target_include_directories()
+# target_link_libraries(t_Matrix matplot)

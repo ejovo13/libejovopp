@@ -1,9 +1,9 @@
-site_name: Libejovo
+site_name: Libejovopp
 
-site_description: High level API for libejovo
+site_description: High level API for libejovopp
 site_author: Evan Voyles
 
-# repo_url: https://github.com/ejovo13/libejovo
+# repo_url: https://github.com/ejovo13/libejovopp
 
 theme:
   # name: mkdocs
