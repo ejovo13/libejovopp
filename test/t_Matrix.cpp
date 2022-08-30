@@ -17,7 +17,7 @@ int main() {
 
     b.print();
 
-    std::cout << b.sum<int>() << std::endl;
+    // std::cout << b.sum<int>() << std::endl;
     std::cout << b.count() << "\n";
 
     // std::cout << (! (m > 5)).count() << std::endl;

@@ -855,20 +855,6 @@ Matrix<T> Matrix<T>::cummin() const {
     return this->accumulate(ejovo::scalar::min<T>);
 }
 
-template <>
-template <>
-int Matrix<bool>::sum() const {
-    int sum = 0;
-    this->loop([&] (auto x) {
-        if (x) sum ++;
-    });
-    return sum;
-}
-
-template <class T>
-template <class U>
-U Matrix<T>::sum() const = delete;
-
 // template <class T>
 // Matrix<T> Matrix<T>::filter_lt(T val) const {
 //     return this->filter([&] (T x) {

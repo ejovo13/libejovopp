@@ -356,8 +356,6 @@ public:
     Matrix<int> which() const; // return a vector of vector indices
     Matrix<int> which(std::function<bool(T)> pred) const;
 
-    template <class U> U sum() const; // Allow a bool Matrix to call Matrix<bool>::sum<int>() -> int
-
 
     // class BoolView;
     // class ConstBoolView;
