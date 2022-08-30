@@ -36,6 +36,7 @@ namespace ejovo {
             double norm();
             double norm(double mean, double sd);
             double exp(double rate = 1);
+            double pareto(double xm, double alpha); // return a value from the pareto distribution with parameters xm and alpha
             int binom(int size, double p = 0.5);
             int hyper(int ndraws, int N, int K);
             bool bernouilli(double p = 0.5); // return true or false
@@ -144,6 +145,16 @@ namespace ejovo {
             double y = this->unifd(0, 1);
 
             return (-1.0 / rate) * std::log(1 - y);
+        }
+
+        // erturn a single single sample from the Pareto distribution with parameters xm and alpha
+        // via the inverse transform method
+        double Xoshiro::pareto(double xm, double alpha) {
+
+            double u = this->unifd(0, 1);
+
+            return (xm / std::pow(u, 1.0 / alpha));
+
         }
 
         // a single trial of a binomial experiment
