@@ -3,6 +3,7 @@
 #include "types.hpp"
 #include "trig.hpp"
 #include "factory.hpp"
+#include <concepts>
 
 namespace ejovo {
 
