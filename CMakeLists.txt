@@ -10,8 +10,8 @@ include(GNUInstallDirs)
 
 
 enable_language(CXX)
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# set(CMAKE_CXX_STANDARD 20)
+# set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 add_library(matrix++ INTERFACE)
@@ -23,6 +23,7 @@ set(PROJ_SRC ${PROJECT_SOURCE_DIR}/src)
 target_include_directories(matrix++ INTERFACE ${PROJ_INC})
 add_compile_options(-Wno-narrowing)
 add_compile_options(-fconcepts) # What the fuck is this man, this is not portable
+add_compile_options(-std=c++20) # AHHHHHH
 # add_subdirectory(sciplot)
 # include_directories(sciplot)
 # include_directories(matplotplusplus/source/matplot/util)
