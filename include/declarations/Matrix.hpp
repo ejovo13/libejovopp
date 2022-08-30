@@ -56,7 +56,7 @@ public:
     using ejovo::Grid1D<T>::sum;
 
     /**============================================
-     *!               Constructors
+     *!               Constructo>rs
      *=============================================**/
     Matrix();
     Matrix(int m); // create a column vector
@@ -229,6 +229,7 @@ public:
      *========================================================================**/
     bool is_null() const;
     bool is_diagonally_dominant() const;
+    bool same(const Matrix<T>& rhs) const;
 
     /**========================================================================
      *!                           Static functions
@@ -288,7 +289,9 @@ public:
 
     // Matrix map(std::function<T(T)> f) const; // returns a Matrix that's the same size as this
     using ejovo::Grid1D<T>::map;
+    using ejovo::Grid1D<T>::map2;
     template <class U> Matrix<U> map(std::function<U(T)> f) const;
+    template <class U, class V> Matrix<V> map2(std::function<V(T, U)> f, const Matrix<U>& mat) const;
 
     // Apply a function if the predicate of an ELEMENT is true
     // Matrix map_if(std::function<T(T)> f, std::function<bool(T)> predicate) const;
@@ -342,7 +345,13 @@ public:
     /**========================================================================
      *!                           Matrix<bool> functions
      *========================================================================**/
-    Matrix<bool> operator!() const;
+    // Matrix<bool> operator!() const;
+    Matrix<bool> NOT() const;
+    Matrix<bool> AND(const Matrix<bool>& mask) const;
+    Matrix<bool> OR(const Matrix<bool>& mask)  const;
+    // Matrix<bool> operator&&(const Matrix<bool>& rhs) const;
+    // Matrix<bool> operator||(const Matrix<bool>& rhs) const;
+    Matrix<bool> as_bool() const;
     Matrix<bool> where(std::function<bool(T)> pred) const; // return a mask where the condition is true
     Matrix<int> which() const; // return a vector of vector indices
     Matrix<int> which(std::function<bool(T)> pred) const;

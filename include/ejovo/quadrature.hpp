@@ -28,6 +28,7 @@ namespace ejovo {
         return dx * ejovo::sum(interv.map(fn));
     }
 
+    template double ejovo::quad::midpoint(const double&, const double&, std::function<double(double)>, int);
 
     // once again, n is the number of subproblems that this is divided into
     template <class X, class Y>

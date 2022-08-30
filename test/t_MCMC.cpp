@@ -39,5 +39,12 @@ int main() {
     // std::vector<int> my_vec_FUNCTION();
     // std::vector<int> my_vec_OBJECT{};
 
+
+    auto mc = MarkovChain::gamblers();
+    auto out = mc.simulate(100, 2);
+
+    out.print();
+
+
     return 0;
 }

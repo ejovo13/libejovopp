@@ -3,6 +3,7 @@
 #include "declarations/Grid1D.hpp"
 
 #include "ejovo/operations.hpp"
+#include "ejovo/factory.hpp"
 
 namespace ejovo {
 
@@ -53,6 +54,97 @@ const T& Grid1D<T>::last() const {
 }
 
 template <class T>
+Matrix<T> Grid1D<T>::take(std::size_t n) const {
+    // return the first min(n, size()) elements of a Grid1D
+    std::size_t n_take = std::min(n, size());
+
+    if (n_take == 0) return Matrix<T>::null();
+    // Return a row vector
+    Matrix<T> m (1, n_take);
+    m.loop_i([&] (int i) {
+        m(i) = this->operator()(i);
+    });
+
+    return m;
+}
+
+template <class T>
+Matrix<T> Grid1D<T>::tail() const {
+
+    // Return everything but the first element
+    auto n = this->size();
+    if (n <= 1) return Matrix<T>::null();
+
+    Matrix<T> m (1, n - 1);
+    m.loop_i([&] (int i) {
+        m(i) = operator()(i + 1);
+    });
+
+    return m;
+}
+
+template <class T>
+Matrix<T> Grid1D<T>::head() const {
+
+    // Return everything but the first element
+    auto n = this->size();
+    if (n <= 1) return Matrix<T>::null();
+
+    Matrix<T> m (1, n - 1);
+    m.loop_i([&] (int i) {
+        m(i) = operator()(i);
+    });
+
+    return m;
+}
+
+template <class T>
+Matrix<T> Grid1D<T>::drop(std::size_t n) const {
+
+    // Return everything but the first element
+    auto sz = this->size();
+    if (n >= sz) return Matrix<T>::null();
+
+    Matrix<T> m (1, sz - n);
+    m.loop_i([&] (int i) {
+        m(i) = operator()(i);
+    });
+
+    return m;
+}
+
+template <class T>
+Matrix<T> Grid1D<T>::pad(std::size_t desired_length, T value) const {
+
+    if (desired_length < size()) return take(desired_length);
+    if (desired_length == size()) return to_matrix();
+
+    Matrix<T> out = Matrix<T>::val(1, desired_length, value);
+    for (std::size_t i = 1; i <= size(); i++) {
+        out(i) = operator()(i);
+    }
+
+    return out;
+}
+
+template <class T>
+Matrix<T> Grid1D<T>::resize(std::pair<std::size_t, std::size_t> pair) const {
+
+    auto nr = std::get<0>(pair);
+    auto nc = std::get<1>(pair);
+    auto total = nr * nc;
+
+    return this->pad(total).reshape(nr, nc);
+
+}
+
+template <class T>
+Matrix<T> Grid1D<T>::resize(std::size_t nr, std::size_t nc) const {
+    return this->pad(nr * nc).reshape(nr, nc);
+}
+
+
+template <class T>
 template <class U>
 bool Grid1D<T>::is_same_size(const Grid1D<U>& rhs) const {
     return this->size() == rhs.size();
@@ -72,8 +164,29 @@ bool Grid1D<T>::is_valid_bound(int i) const {
 template <class T>
 Grid1D<T>& Grid1D<T>::operator=(const Grid1D& rhs) {
     // Check if they are the same size
-    if (this->isnt_same_size(rhs)) return *this;
+    if (this->isnt_same_size(rhs)) {
+        std::cout << "ERROR: RowView and 1d rhs are not the same size\n";
+        return *this;
+    }
     return rhs.loop_i([&] (int i) { this->operator()(i) = rhs(i); } );
+}
+
+template <class T>
+Grid1D<T>& Grid1D<T>::operator=(std::initializer_list<T> list) {
+
+    auto n = this->size();
+    // Check if they are the same size
+    if (n != list.size()) return *this;
+
+    std::size_t i = 0;
+
+    for (auto el : list) {
+        this->operator[](i) = el;
+        i++;
+    }
+
+    return *this;
+
 }
 
 template <class T>
@@ -86,6 +199,37 @@ bool Grid1D<T>::operator==(const Grid1D& rhs) {
     }
 
     return true;
+}
+
+template <class T>
+bool Grid1D<T>::eq(const T *arr) {
+
+    auto n = this->size();
+    for (std::size_t i = 0; i < n; i++) {
+        if (this->operator[](i) != arr[i]) return false;
+    }
+
+    return true;
+
+}
+
+template <class T>
+bool Grid1D<T>::eq(std::initializer_list<T> list) {
+
+    auto n = this->size();
+    if (n != list.size()) return false;
+
+    std::size_t i = 0;
+
+    for (auto el : list) {
+
+        if (el != this->operator[](i)) return false;
+
+        i++;
+    }
+
+    return true;
+
 }
 
 template <class T>
@@ -354,6 +498,15 @@ Matrix<T> Grid1D<T>::map(unary_op fn) const {
 }
 
 template <class T>
+Matrix<T> Grid1D<T>::map2(binary_op fn, const Grid1D<T>& rhs) const {
+    auto out = this->to_matrix();
+    out.loop_i([&] (int i) {
+        out(i) = fn(out(i), rhs(i));
+    });
+    return out;
+}
+
+template <class T>
 Matrix<T> Grid1D<T>::map_if(unary_op fn, predicate pred) const {
     int c = this->count(pred);
 
@@ -375,6 +528,8 @@ Matrix<T> Grid1D<T>::filter(predicate pred) const {
             out_i++;
         }
     });
+
+    return out;
 }
 
 template <class T>
@@ -399,12 +554,12 @@ Matrix<T> Grid1D<T>::midpoints() const {
 
 template <class T>
 Matrix<T> Grid1D<T>::abs() const {
-    return this->map(ejovo::abs<T>);
+    return this->map(ejovo::factory::abs<T>());
 }
 
 template <class T>
 Matrix<T> Grid1D<T>::sqrt() const {
-    return this->map([&] (auto x) { return std::sqrt(x); } );
+    return this->map(ejovo::factory::sqrt<T>());
 }
 
 template <class T>
@@ -420,12 +575,12 @@ Matrix<T> Grid1D<T>::pow(int k) const {
 
 template <class T>
 Matrix<T> Grid1D<T>::sqrd() const {
-    return this->map([&] (auto x) { return x * x; } );
+    return this->map(ejovo::factory::sqrd<T>());
 }
 
 template <class T>
 Matrix<T> Grid1D<T>::cubd() const {
-    return this->map([&] (auto x) { return x * x * x; } );
+    return this->map(ejovo::factory::cubd<T>());
 }
 
 template <class T>
@@ -514,6 +669,65 @@ Matrix<T> Grid1D<T>::zeros(int n, bool col) const {
     else return Matrix<T>::zeros(1, n);
 }
 
+
+/**========================================================================
+ *!                           Conditions
+ *========================================================================**/
+template <class T>
+// template <class U>
+Matrix<T> Grid1D<T>::cond(predicate pred) const {
+    return filter(pred);
+}
+
+template <class T>
+Matrix<T> Grid1D<T>::lt(const T& val) const {
+    return filter(ejovo::factory::lt(val));
+}
+
+template <class T>
+Matrix<T> Grid1D<T>::gt(const T& val) const {
+    return filter(ejovo::factory::gt(val));
+}
+
+template <class T>
+Matrix<T> Grid1D<T>::leq(const T& val) const {
+    return filter(ejovo::factory::leq(val));
+}
+
+template <class T>
+Matrix<T> Grid1D<T>::geq(const T& val) const {
+    return filter(ejovo::factory::geq(val));
+}
+
+template <class T>
+Matrix<T> Grid1D<T>::eq(const T& val) const {
+    return filter(ejovo::factory::eq(val));
+}
+
+template <>
+Matrix<int> Grid1D<int>::even() const {
+    return filter(ejovo::factory::even<int>());
+}
+
+template<class T>
+Matrix<T> Grid1D<T>::pos() const {
+    return filter(ejovo::factory::pos<T>());
+}
+
+template<class T>
+Matrix<T> Grid1D<T>::neg() const {
+    return filter(ejovo::factory::neg<T>());
+}
+
+template <>
+Matrix<int> Grid1D<int>::odd() const {
+    return filter(ejovo::factory::odd<int>());
+}
+
+
+
+// template <class T, class U>
+// Matrix<U> Grid1D<
 
 
 

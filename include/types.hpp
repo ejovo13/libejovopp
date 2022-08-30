@@ -13,3 +13,5 @@
 #include "declarations/RowView.hpp"
 #include "declarations/ColView.hpp"
 #include "declarations/VecView.hpp"
+#include "declarations/KdTree.hpp"
+// #include "declarations/TransView.hpp"

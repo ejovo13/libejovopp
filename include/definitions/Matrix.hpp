@@ -143,6 +143,7 @@ template <class T> std::unique_ptr<T[]> Matrix<T>::copyData() const {
 }
 
 template <class T> Matrix<T>::Matrix(const Matrix& rhs) : m{rhs.m}, n{rhs.n} {
+    // std::cout << "I'm copying you sonnova\n";
     this->data = rhs.copyData();
 }
 
@@ -462,6 +463,8 @@ template <class T> Matrix<T>::Matrix(Matrix&& rhs) : m{rhs.m}, n{rhs.n} {
     rhs.data = nullptr;
     rhs.m = 0;
     rhs.n = 0;
+
+    // std::cout << "Im mooooving!\n";
 }
 
 // template <class T> Matrix<T>::Matrix(const Vector<T>& rhs) : m{rhs.m}, n{rhs.n} {
@@ -752,6 +755,12 @@ bool Matrix<T>::is_null() const {
 }
 
 template <class T>
+bool Matrix<T>::same(const Matrix<T>& rhs) const {
+    if (this->data != rhs.data) return false;
+    return this->is_same_shape(rhs);
+}
+
+template <class T>
 bool Matrix<T>::can_add_b(const Matrix &rhs) const {
     return this->is_same_shape(rhs);
 }
@@ -784,6 +793,24 @@ Matrix<U> Matrix<T>::map(std::function<U(T)> f) const {
     });
     return out;
 }
+
+template <class T>
+template <class U, class V>
+Matrix<V> Matrix<T>::map2(std::function<V(T, U)> fn, const Matrix<U>& rhs) const {
+
+    // Make sure that these two matrices are exactly the same size
+    if (this->isnt_same_size(rhs)) return Matrix<V>::null();
+
+    Matrix<V> out (this->m, this->n);
+    out.loop_i([&] (int i) {
+        out(i) = fn(this->operator()(i), rhs(i));
+    });
+
+    return out;
+}
+
+
+
 
 template <class T>
 Matrix<T> Matrix<T>::accumulate(std::function<T(const T&, const T&)> bin_op, T init) const {
@@ -959,10 +986,30 @@ Matrix<T> Matrix<T>::rand(int m, int n) {
  *!                           Logical indexing type functions
  *========================================================================**/
 template<>
-Matrix<bool> Matrix<bool>::operator!() const {
+Matrix<bool> Matrix<bool>::NOT() const {
     return this->map([&] (bool b) {
         return !b;
     });
+}
+
+template<>
+Matrix<bool> Matrix<bool>::AND(const Matrix<bool>& mask) const {
+
+    if (this->isnt_same_size(mask)) return Matrix<bool>::null();
+
+    return this->map2<bool, bool>([&] (bool x, bool y) { return x && y; }
+                      , mask);
+
+}
+
+template<>
+Matrix<bool> Matrix<bool>::OR(const Matrix<bool>& mask) const {
+
+    if (this->isnt_same_size(mask)) return Matrix<bool>::null();
+
+    return this->map2<bool, bool>([&] (bool x, bool y) { return x || y; }
+                      , mask);
+
 }
 
 // Add a binary COMPARISON that returns a bool no matter what T is.
@@ -1033,6 +1080,14 @@ Matrix<bool> Matrix<T>::where(std::function<bool(T)> pred) const {
         out(i) = pred(this->operator()(i));
     });
     return out;
+}
+
+template<class T>
+Matrix<bool> Matrix<T>::as_bool() const {
+    return map<bool>([&] (T x) {
+        if (x) return true;
+        else return false;
+    });
 }
 
 // return the VECTOR indices where the mask is TRUE

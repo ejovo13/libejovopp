@@ -5,6 +5,21 @@
 ![example workflow](https://github.com/ejovo13/libejovo/actions/workflows/Ubuntu.yml/badge.svg)
 [![Documentation Status](https://readthedocs.org/projects/libejovo/badge/?version=latest)](https://libejovo.readthedocs.io/en/latest/?badge=latest)
 
+
+# Libejovocpp
+
+Got a lot of stuff to work on for this library
+
+## TODO
+
+- [ ] Rewrite this todo
+- [ ] Work on select math expositions
+- [ ] Add Doxygen style documentation to all public-facing functions
+- [ ] Create a Tutorial
+- [ ] How-to guides
+
+---
+
 ## Introduction
 Libejovo is the synthesis of my Applied Mathematics and Computer Science education. Centering around the fundamental type `Matrix`, Libejovo contains a number of general purpose routines that span the following subjects:
 

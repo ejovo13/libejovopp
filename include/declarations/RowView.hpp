@@ -23,6 +23,7 @@ public:
     T& operator[](int i) override;
 
     using AbsView::operator=;
+    using Grid1D<T>::operator=;
     RowView& operator=(const RowView&);
 
     RowView(Matrix& mat, int i);

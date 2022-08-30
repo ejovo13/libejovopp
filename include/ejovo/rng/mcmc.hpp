@@ -23,10 +23,18 @@ public:
     MarkovChain(const mat& T);
     MarkovChain(mat&& T);
 
+    MarkovChain(const MarkovChain& rhs);
+    MarkovChain(MarkovChain&& rhs);
+
+    MarkovChain& operator=(MarkovChain&& rhs);
+    MarkovChain& operator=(const MarkovChain& rhs);
+
     bool is_valid_state(int X);
 
     Matrix<int> simulate(int n = 10, int X0 = 1);
     Matrix<double> pow(int k);
+
+    static MarkovChain gamblers();
 
 
 private:
@@ -50,6 +58,35 @@ MarkovChain::MarkovChain(mat&& __T) {
     if (!__T.is_square()) throw "T is not square, cannot construct a Markov chain";
     this->T = __T;
     this->n = __T.nrow();
+}
+
+MarkovChain::MarkovChain(const MarkovChain& rhs)
+    : T{rhs.T}
+    , n{rhs.n}
+    {}
+
+// Need to return rhs to a valid, default state
+MarkovChain::MarkovChain(MarkovChain&& rhs)
+    : T{rhs.T}
+    , n{rhs.n}
+{
+    rhs.n = 0;
+    rhs.T.nullify();
+}
+
+
+// Creating from a constant reference, we want to
+// take ownership of a brand new matrix
+MarkovChain& MarkovChain::operator=(const MarkovChain& rhs) {
+    this->T = rhs.T;
+    this->n = rhs.n;
+    return *this;
+}
+
+MarkovChain& MarkovChain::operator=(MarkovChain&& rhs) {
+    this->T = rhs.T;
+    this->n = rhs.n;
+    return *this;
 }
 
 bool MarkovChain::is_valid_state(int X) { return X >= 1 && X <= n; }
@@ -81,6 +118,16 @@ Matrix<double> MarkovChain::pow(int k) {
     return T^k;
 }
 
+MarkovChain MarkovChain::gamblers() {
+    MarkovChain mc (Matrix<double>::from({1.0, 0.0, 0.0, 0.0, 0.0,
+                                          0.6, 0.0, 0.4, 0.0, 0.0,
+                                          0.0, 0.6, 0.0, 0.4, 0.0,
+                                          0.0, 0.0, 0.6, 0.0, 0.4,
+                                          0.0, 0.0, 0.0, 0.0, 1.0},
+                                          5, 5, true));
+
+    return mc;
+}
 
 
 

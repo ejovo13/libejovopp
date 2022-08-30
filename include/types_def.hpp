@@ -11,3 +11,4 @@
 #include "definitions/RowView.hpp"
 #include "definitions/ColView.hpp"
 #include "definitions/VecView.hpp"
+#include "definitions/KdTree.hpp"

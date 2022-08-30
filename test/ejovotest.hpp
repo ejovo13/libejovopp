@@ -15,6 +15,17 @@ Matrix<double> get_erf_matlab() {
     }, 1, 1000);
 }
 
+Matrix<double> tmat() {
+    return Matrix<double>::from(
+        { 4, 5, 2, 4,
+          1, 8, 3, 5,
+          2, 4, 3, 0 },
+        3,
+        4,
+        true
+    );
+}
+
 // std::function<double (double)>
 
 };

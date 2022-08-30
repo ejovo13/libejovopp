@@ -81,6 +81,13 @@ namespace ejovo {
         }
 
         template <class T>
+        std::function<bool(T)> eq(const T& rhs) {
+            return [&] (T x) {
+                return x == rhs;
+            };
+        }
+
+        template <class T>
         std::function<bool(T)> geq(const T& rhs) {
             return [&] (T x) {
                 return x >= rhs;
@@ -102,14 +109,42 @@ namespace ejovo {
         }
 
         template <class X>
-        bool even(X x) {
-            return x % 2 == 0;
+        std::function<bool(X)> even() {
+            return [&] (X x) -> bool {
+                return x % 2 == 0;
+            };
         }
 
         template <class X>
-        bool odd(X x) {
-            return !even<X>(x);
+        std::function<bool(X)> odd() {
+            return [&] (X x) -> bool {
+                return x % 2 != 0;
+            };
         }
+
+        template <class X>
+        std::function<bool(X)> pos() {
+            return [&] (X x) -> bool {
+                return x > 0;
+            };
+        }
+
+        template <class X>
+        std::function<bool(X)> neg() {
+            return [&] (X x) -> bool {
+                return x < 0;
+            };
+        }
+
+        template <class X>
+        std::function<X(X, X)> plus() {
+            return [&] (X lhs, X rhs) {
+                return lhs + rhs;
+            };
+        }
+
+        // template <class X, class Y>
+        // std::function<X(X, Y)> plus()
 
         template <class X>
         std::function<X(X)> times(const X& rhs) {
@@ -129,6 +164,34 @@ namespace ejovo {
         std::function<int(X)> indicator(const X& a, const X& b) {
             return [&] (X x) {
                 return x >= a && x <= b;
+            };
+        }
+
+        template <class X>
+        std::function<X(X)> sqrt() {
+            return [&] (X x) {
+                return std::sqrt(x);
+            };
+        }
+
+        template <class X>
+        std::function<X(X)> abs() {
+            return [&] (X x) {
+                return std::abs(x);
+            };
+        }
+
+        template <class X>
+        std::function<X(X)> sqrd() {
+            return [&] (X x) {
+                return x * x;
+            };
+        }
+
+        template <class X>
+        std::function<X(X)> cubd() {
+            return [&] (X x) {
+                return x * x * x;
             };
         }
 

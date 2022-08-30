@@ -1,20 +1,17 @@
 #include "ejovotest.hpp"
+// #include "operations.hpp"
 
 void t_Matrix();
 
 using namespace ejovo;
 int main() {
 
-
-    std::cout << "Hello world\n";
-
     auto m = Matrix<double>::ij(10);
     auto m2 = Matrix<double>::zeros(5, 20);
     auto m3 = Matrix<double>::zeros(1, 2);
 
-    std::cout << m.first() << std::endl;
-    std::cout << m.last() << "\n";
-
+    assert(m.first() == 1);
+    assert(m.last() == 19);
     // m.fill(3);
 
     // m.print();
@@ -100,9 +97,6 @@ void t_Matrix() {
         assert(x.max() == 5);
         assert(x.prod() == 120);
 
-        std::cout << "x.norm() -> " << x.norm() << "\n";
-        std::cout << "sqrt(1...) -> " << sqrt(1 + 4 + 9 + 16 + 25) << "\n";
-
         // I lose precision that's carry
         assert(abs(x.norm() - sqrt(1 + 4 + 9 + 16 + 25)) < 0.0000001);
 
@@ -111,12 +105,121 @@ void t_Matrix() {
         assert(y.sum_abs() == 15);
         assert(y.sum() == 3);
 
+        std::cout << "Stats passed\n";
 
     };
+
+    /**========================================================================
+     *!                           Functional like patters
+     *========================================================================**/
+    auto t_functional = [] () {
+
+        auto m = Matrix<double>::from({1, 3, 5, 4, 2, 6});
+
+        // take
+        assert(m.take(3).eq({1, 3, 5}));
+        assert(m.take(0).is_null());
+        assert(m.take(5).eq({1, 3, 5, 4, 2}));
+        assert(m.take(20).eq({1, 3, 5, 4, 2, 6}));
+
+        // tail
+        assert(m.tail().eq({3, 5, 4, 2, 6}));
+
+        // head
+        assert(m.head().eq({1, 3, 5, 4, 2}));
+
+        // drop@
+        assert(m.drop(10).is_null());
+        assert(m.drop(2).eq({1, 3, 5, 4}));
+        assert(m.drop(5).eq({1}));
+        assert(m.drop(6).is_null());
+
+        // pad
+        assert(m.pad(3).eq({1, 3, 5}));
+        assert(m.pad(8, 2).eq({1, 3, 5, 4, 2, 6, 2, 2}));
+        assert(m.pad(10).eq({1, 3, 5, 4, 2, 6, 0, 0, 0, 0}));
+
+        // resize
+        m.first() = 3;
+        m.last() = 19;
+
+        assert(m(1) == 3);
+        assert(m(m.size()) == 19);
+        assert(m.same(m));
+        assert(m == m.to_matrix());
+
+
+        std::cout << "Functional passed\n";
+
+    };
+
+    using namespace ejovo::factory;
+
+    auto t_conditionals = [] () {
+
+        auto m = tmat();
+
+        assert(m.cond(eq(0.0)).size() == 1);
+        assert(m.eq(4).size() == 3);
+        assert(m.lt(5).size() == 9);
+        assert(m.gt(100).size() == 0);
+        assert(m.lt(-300).size() == 0);
+        // assert((!m.lt(-300)).count() == m.size());
+        assert(m.leq(5).size() == 11);
+        assert(m.geq(8).size() == 1);
+
+        std::cout << "Conditionals passed\n";
+
+    };
+
+    auto t_filter = [] () {
+
+        auto m = tmat();
+
+        auto TRUE = [&] (auto x) {
+            return true;
+        };
+
+        auto filtered = m.filter(TRUE);
+
+        // auto filtered1 = m.filter(ejovo::factory::even<double>());
+
+        // filtered1.print();
+
+        assert(m == m);
+        assert(filtered == m);
+
+        m(m < 5) = 20;
+
+        assert(m.as_bool() == Matrix<bool>::ones(m.nrow(), m.ncol()));
+        assert(m.as_bool().NOT() == Matrix<bool>::zeros(m.nrow(), m.ncol()));
+
+        auto m2_explicit = m.map2<double, double>([&] (auto x, auto y) { return x + y; }, Matrix<double>::ones(12));
+        auto m2_implicit = m.map2(factory::plus<double>(), Matrix<double>::ones(12));
+
+        assert(m2_explicit == m2_implicit);
+
+        std::cout << "Filter passed \n";
+
+        m.print();
+
+        m.lt(10).print();
+        m.geq(20).print();
+        m.pos().print();
+        m.sqrd().print();
+
+        m.where(factory::lt(10)).print();
+
+
+    };
+
 
     t_bool();
     t_fill();
     t_stats();
+    t_functional();
+    t_filter();
+    t_conditionals();
 
 
 

@@ -4,6 +4,11 @@ namespace ejovo {
 
     namespace binop {
 
+        template <class X>
+        X plus(const X& x, const X& y) {
+            return x + y;
+        }
+
         template <class X, class Y>
         X plus(const X& x, const Y& y) {
             return x + y;
@@ -19,8 +24,18 @@ namespace ejovo {
             return x - y;
         }
 
+        template <class X>
+        X minus(const X& x, const X& y) {
+            return x - y;
+        }
+
         template <class X, class Y>
         X times(const X& x, const Y& y) {
+            return x * y;
+        }
+
+        template <class X>
+        X times(const X& x, const X& y) {
             return x * y;
         }
 

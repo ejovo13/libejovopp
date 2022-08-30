@@ -35,8 +35,8 @@ Matrix<int> seq(int start, int end) {
     const int len_seq = (end - start) + 1;
     Matrix<int> out{len_seq};
     out.fill(0);
-    out.loop([&] (int& x) {
-        x = start + (x - 1);
+    out.loop_i([&] (int i) {
+        out(i) = start + (i - 1);
     });
     return out;
 }
@@ -66,55 +66,55 @@ Matrix<double> seq(int start, int end, double diff) {
 //     return out;
 // }
 
-template<class T>
-T mean(const Matrix<T>& mat) {
-    int len = mat.size();
-    return sum(mat) / len;
-}
+// template<class T>
+// T mean(const Matrix<T>& mat) {
+//     int len = mat.size();
+//     return sum(mat) / len;
+// }
 
-template <class T>
-T var(const Matrix<T>& mat, bool population = true) {
-    T u = mat.mean();
+// template <class T>
+// T var(const Matrix<T>& mat, bool population = true) {
+//     T u = mat.mean();
 
-    int den = population ? mat.size() : mat.size() - 1;
+//     int den = population ? mat.size() : mat.size() - 1;
 
-    Matrix<T> m = mat - u;
-    return m.sqrd().sum() / den;
-}
+//     Matrix<T> m = mat - u;
+//     return m.sqrd().sum() / den;
+// }
 
-template<class T>
-T sd(const Matrix<T>& mat, bool population = true) {
-    return sqrt(ejovo::var(mat, population));
-}
+// template<class T>
+// T sd(const Matrix<T>& mat, bool population = true) {
+//     return sqrt(ejovo::var(mat, population));
+// }
 
-template<class T, class Predicate>
-Matrix<T> filter(Matrix<T> mat, Predicate f) {
-    // make one pass to count how many times the result is true
-    int count = 0;
-    mat.loop_i([&] (int i) {
-        if (f(mat(i))) count ++;
-    });
+// template<class T, class Predicate>
+// Matrix<T> filter(Matrix<T> mat, Predicate f) {
+//     // make one pass to count how many times the result is true
+//     int count = 0;
+//     mat.loop_i([&] (int i) {
+//         if (f(mat(i))) count ++;
+//     });
 
-    Matrix<T> out{count};
+//     Matrix<T> out{count};
 
-    int out_i = 1;
-    mat.loop_i([&] (int i) {
-        if (f(mat(i))) {
-            out(out_i) = mat(i);
-            out_i ++;
-        }
-    });
+//     int out_i = 1;
+//     mat.loop_i([&] (int i) {
+//         if (f(mat(i))) {
+//             out(out_i) = mat(i);
+//             out_i ++;
+//         }
+//     });
 
-    return out;
-}
+//     return out;
+// }
 
-template<class T, class UnaryFn>
-Matrix<T>& mutate(Matrix<T> &mat, UnaryFn f) {
-    for (int i = 0; i < mat.size(); i++) {
-        mat[i] = f(mat[i]);
-    }
-    return mat;
-}
+// template<class T, class UnaryFn>
+// Matrix<T>& mutate(Matrix<T> &mat, UnaryFn f) {
+//     for (int i = 0; i < mat.size(); i++) {
+//         mat[i] = f(mat[i]);
+//     }
+//     return mat;
+// }
 
 // whereas map returns a value, apply will just call the function and not save the return
 template <class T, class UnaryFn>

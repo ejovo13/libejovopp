@@ -133,6 +133,11 @@ typename Matrix<T>::AbsView& Matrix<T>::AbsView::assign(const AbsView& view, std
 }
 
 template <class T>
+std::pair<std::size_t, std::size_t> Matrix<T>::AbsView::shape() const {
+    return std::make_pair(this->nrow(), this->ncol());
+}
+
+template <class T>
 Matrix<T> Matrix<T>::AbsView::to_matrix() const {
 
     Matrix out{this->nrow(), this->ncol()};

@@ -1,3 +1,16 @@
+/**
+ *
+ *
+ * @file AbsView.hpp
+ * @author Evan Voyles (you@domain.com)
+ * @brief
+ * @version 0.1
+ * @date 2022-07-25
+ *
+ * @copyright This project is insane
+ *
+ */
+
 #pragma once
 
 #include "Matrix.hpp"
@@ -46,6 +59,8 @@ public:
 
     virtual AbsView& operator*=(const T& scalar);
     virtual AbsView& operator/=(const T& scalar);
+
+    virtual std::pair<std::size_t, std::size_t> shape() const;
 
     Matrix to_matrix() const;
     // Matrix to_rowvec();

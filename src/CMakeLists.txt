@@ -1,0 +1,25 @@
+add_library(ejovopp STATIC lib.cpp)
+
+
+target_include_directories(ejovopp
+PUBLIC
+"$<BUILD_INTERFACE:${PROJ_INC}>"
+"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>")
+
+
+install(TARGETS ejovopp
+        EXPORT ejovoppTargets
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+set_property(TARGET ejovopp PROPERTY CXX_STANDARD 20)
+
+install(DIRECTORY ${PROJ_INC}/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+install(EXPORT ejovoppTargets
+        FILE ejovoppTargets.cmake
+        NAMESPACE ejovopp::
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ejovopp
+)

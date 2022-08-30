@@ -6,6 +6,7 @@ project(libejovo++)
 # find_library(matplot REQUIRED)
 include(FindPNG)
 include(FindGnuplot)
+include(GNUInstallDirs)
 
 
 enable_language(CXX)
@@ -16,6 +17,7 @@ add_library(matrix++ INTERFACE)
 
 set(PROJ_INC ${PROJECT_SOURCE_DIR}/include)
 set(PROJ_TEST ${PROJECT_SOURCE_DIR}/test)
+set(PROJ_SRC ${PROJECT_SOURCE_DIR}/src)
 
 target_include_directories(matrix++ INTERFACE ${PROJ_INC})
 add_compile_options(-Wno-narrowing)
@@ -32,6 +34,7 @@ add_compile_options(-Wno-narrowing)
 # add_subdirectory(matplotlib-cpp)
 # add_subdirectory(matplotplusplus)
 add_subdirectory(${PROJ_TEST})
+add_subdirectory(${PROJ_SRC})
 
 
 # add_executable(t_abs_view t_AbsView.cpp)

@@ -32,13 +32,18 @@ Matrix<T>::RowView::RowView(Matrix& mat, int i, int jb, int je)
 {};
 
 // This might not be sharing the same reference to the matrix...
+// Which is totally fine right? That's how I expect these to behave, right?
 template <class T>
 Matrix<T>::RowView::RowView(RowView&& rv)
     : i{rv.i}
     , jb{rv.jb}
     , je{rv.je}
-    , mat{mat}
-{};
+    , mat{rv.mat}
+{
+
+    // std::cout << "Moving row views\n";
+
+};
 // deconstruct rv??
 
 template <class T>

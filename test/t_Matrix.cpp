@@ -20,7 +20,7 @@ int main() {
     std::cout << b.sum<int>() << std::endl;
     std::cout << b.count() << "\n";
 
-    std::cout << (! (m > 5)).count() << std::endl;
+    // std::cout << (! (m > 5)).count() << std::endl;
 
     std::cout << m.count([&] (auto x) {
         return x <= 5;
@@ -212,7 +212,7 @@ void t_quad() {
     // auto mv = m | lt<int>(10) | gt<int>(3);
     auto mv = m | AND(lt<int>(10), gt<int>(5));
 
-    auto mvp = m.vecview(AND(gt(10), even<int>));
+    auto mvp = m.vecview(AND(gt(10), even<int>()));
 
     // auto mv_f = mv.filter(gt<int>(5));
     mv.print();

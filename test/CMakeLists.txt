@@ -9,6 +9,7 @@ add_executable(t_Vector t_Vector.cpp)
 add_executable(t_mcmc t_MCMC.cpp)
 add_executable(t_MonteCarlo t_MonteCarlo.cpp)
 add_executable(t_Linear t_Linear.cpp)
+add_executable(t_Kd t_Kd.cpp)
 
 
 # add_executable(t_Min t_Min.cpp)
@@ -24,6 +25,7 @@ target_link_libraries(t_Vector PUBLIC matrix++)
 target_link_libraries(t_mcmc PUBLIC matrix++)
 target_link_libraries(t_MonteCarlo PUBLIC matrix++)
 target_link_libraries(t_Linear PUBLIC matrix++)
+target_link_libraries(t_Kd PUBLIC matrix++)
 # target_link_libraries(t_Min PUBLIC matrix++)
 
 
