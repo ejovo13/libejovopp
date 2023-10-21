@@ -63,7 +63,7 @@ namespace ejovo {
         // Let's implement a 5 point method!!!
         double dx = (b - a) / n;
 
-        double x0_off = 0;
+        // double x0_off = 0;
         double x12_off = 0.538469310105683 * (dx / 2.0); // if dx = 2 ([-1, 1]), we want x1 to end up at 0.53846931
         double x34_off = 0.906179845938664 * (dx / 2.0);
 

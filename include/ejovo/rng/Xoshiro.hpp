@@ -22,32 +22,32 @@ namespace ejovo {
             // Xoshiro(std::initializer_list<uint64_t> list);
             Xoshiro(uint64_t, uint64_t, uint64_t, uint64_t);
 
-            Xoshiro& seed();
+            inline Xoshiro& seed();
             // Xoshiro& seed(std::initializer_list<uint64_t> list);
-            Xoshiro& seed(uint64_t, uint64_t, uint64_t, uint64_t);
+            inline Xoshiro& seed(uint64_t, uint64_t, uint64_t, uint64_t);
 
-            uint64_t next();
-            double next_double();
-            int next_int();
+            inline uint64_t next();
+            inline double next_double();
+            inline int next_int();
 
-            int unif(int a, int b);
-            double unifd(double a, double e);
+            inline int unif(int a, int b);
+            inline double unifd(double a, double e);
             // double unif(); // Return X ~ U(0, 1)
-            double norm();
-            double norm(double mean, double sd);
-            double exp(double rate = 1);
-            double pareto(double xm, double alpha); // return a value from the pareto distribution with parameters xm and alpha
-            int binom(int size, double p = 0.5);
-            int hyper(int ndraws, int N, int K);
-            bool bernouilli(double p = 0.5); // return true or false
-            template <class T> int categorical(const Grid1D<T>& p); // return an integer i from 1 to k representing the category of the p(i)
-            int categorical(std::vector<double> p); // For now we will assume that the probabilites are not sorted.
+            inline double norm();
+            inline double norm(double mean, double sd);
+            inline double exp(double rate = 1);
+            inline double pareto(double xm, double alpha); // return a value from the pareto distribution with parameters xm and alpha
+            inline int binom(int size, double p = 0.5);
+            inline int hyper(int ndraws, int N, int K);
+            inline bool bernouilli(double p = 0.5); // return true or false
+            template <class T> inline std::size_t categorical(const Grid1D<T>& p); // return an integer i from 1 to k representing the category of the p(i)
+            std::size_t categorical(std::vector<double> p); // For now we will assume that the probabilites are not sorted.
 
 
 
         };
 
-        uint64_t rol64(uint64_t x, int k) {
+        inline uint64_t rol64(uint64_t x, int k) {
             return (x << k) | (x >> (64 - k));
         }
 
@@ -72,7 +72,7 @@ namespace ejovo {
             return *this;
         }
 
-        uint64_t Xoshiro::next()
+        inline uint64_t Xoshiro::next()
         {
             uint64_t *s = state;
             uint64_t const result = rol64(s[1] * 5, 7) * 9;
@@ -89,7 +89,7 @@ namespace ejovo {
             return result;
         }
 
-        int Xoshiro::next_int() {
+        inline int Xoshiro::next_int() {
         // interpret the first 32 bits of the 64 bits as an integer. - this returns a uniform X ~ [0, 2147483647]
             int *iptr = nullptr;
             uint64_t bits = this->next();
@@ -99,12 +99,12 @@ namespace ejovo {
         }
 
         // get a double in the range [0, 1]
-        double Xoshiro::next_double() {
+        inline double Xoshiro::next_double() {
             uint64_t val = this->next();
             return (double) val / (double) ULONG_MAX; // This is how we "take the top 53 bits I think........."
         }
 
-        int Xoshiro::unif(int a, int b) {
+        inline int Xoshiro::unif(int a, int b) {
         // return a random variable X ~ [a, b]
             // int = get_int_xoshiro()
             int spread = (b - a) + 1;
@@ -113,7 +113,7 @@ namespace ejovo {
             return (int) std::floor(x * spread) + (a) ; // floor(x * spread) returns a vlue in [0, spread)
         }
 
-        double Xoshiro::unifd(double a, double b) {
+        inline double Xoshiro::unifd(double a, double b) {
 
             double spread = (b - a);
 
@@ -124,7 +124,7 @@ namespace ejovo {
 
         // double Xoshir
 
-        double Xoshiro::norm() {
+        inline double Xoshiro::norm() {
 
             double u1 = this->unifd(0, 1);
             double u2 = this->unifd(0, 1);
@@ -135,12 +135,12 @@ namespace ejovo {
         }
 
         // sample from X ~ N(mean, std^2)
-        double Xoshiro::norm(double mean, double std) {
+        inline double Xoshiro::norm(double mean, double std) {
             return (norm() * std) + mean;
         }
 
         // sample once from the exponential distribution
-        double Xoshiro::exp(double rate) {
+        inline double Xoshiro::exp(double rate) {
 
             double y = this->unifd(0, 1);
 
@@ -149,7 +149,7 @@ namespace ejovo {
 
         // erturn a single single sample from the Pareto distribution with parameters xm and alpha
         // via the inverse transform method
-        double Xoshiro::pareto(double xm, double alpha) {
+        inline double Xoshiro::pareto(double xm, double alpha) {
 
             double u = this->unifd(0, 1);
 
@@ -158,7 +158,7 @@ namespace ejovo {
         }
 
         // a single trial of a binomial experiment
-        int Xoshiro::binom(int size, double p) {
+        inline int Xoshiro::binom(int size, double p) {
             int count = 0;
             for (int i = 0; i < size; i++) {
                 if (this->next_double() <= p) count++;
@@ -168,7 +168,7 @@ namespace ejovo {
 
             // int hyper(int ndraws, int N, int K);
         // n draws, return the number of successes with population N and successful elements K
-        int Xoshiro::hyper(int ndraws, int N, int K) {
+        inline int Xoshiro::hyper(int ndraws, int N, int K) {
             // std::cout << "Calculating hyper with ndraws: " << ndraws << ", N: " << N << ", K: " << K << "\n";
             int count = 0;
             double p = 0;
@@ -190,13 +190,13 @@ namespace ejovo {
             return count;
         }
 
-        bool Xoshiro::bernouilli(double p) {
+        inline bool Xoshiro::bernouilli(double p) {
             return unifd(0, 1) <= p;
         }
 
         // return a number between 1 and p.size()
         template <class T>
-        int Xoshiro::categorical(const Grid1D<T>& p) {
+        inline std::size_t Xoshiro::categorical(const Grid1D<T>& p) {
 
             // iterate along the elements of the matrix (hopefully sorted...)
             // and return the integer of the corresponding division that it falls in
@@ -205,14 +205,13 @@ namespace ejovo {
             double x = unifd(0, 1);
             double acc = 0;
 
-            for (int i = 1; i <= p.size(); i++) {
+            for (std::size_t i = 1; i <= p.size(); i++) {
                 acc += p(i);
                 if (x < acc) return i;
             }
 
-            return 0;
+            return 0u;
         }
-
 
 
         // create a global Xoshiro

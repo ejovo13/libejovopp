@@ -19,7 +19,7 @@ public:
     std::size_t nrow() const override;
     std::size_t ncol() const override;
 
-    T& operator[](int i) const override;
+    const T& operator[](int i) const override;
     T& operator[](int i) override;
 
     using AbsView::operator=;

@@ -14,4 +14,5 @@
 #include "declarations/ColView.hpp"
 #include "declarations/VecView.hpp"
 #include "declarations/KdTree.hpp"
+#include "declarations/Clock.hpp"
 // #include "declarations/TransView.hpp"

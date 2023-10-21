@@ -36,10 +36,10 @@ namespace ejovo {
         }
     }
 
-    Matrix<double> runif(int n, double a = 0, double b = 1) {
+    inline Matrix<double> runif(int n, double a = 0, double b = 1) {
 
         // verify that n is greater than 0
-        if (n == 0) return Matrix<double>::null();
+        if (n <= 0) return Matrix<double>::null();
 
         Matrix<double> out(1, n);
         out.loop([&] (double& x) {
@@ -49,10 +49,10 @@ namespace ejovo {
         return out;
     }
 
-    Matrix<double> rnorm(int n, double mean = 0, double sd = 1) {
+    inline Matrix<double> rnorm(int n, double mean = 0, double sd = 1) {
 
         // verify that n is greater than 0
-        if (n == 0) return Matrix<double>::null();
+        if (n <= 0) return Matrix<double>::null();
 
         Matrix<double> out(1, n);
         out.loop([&] (double& x) {
@@ -62,10 +62,10 @@ namespace ejovo {
         return out;
     }
 
-    Matrix<double> rexp(int n, double rate = 1) {
+    inline Matrix<double> rexp(int n, double rate = 1) {
 
         // verify that n is greater than 0
-        if (n == 0) return Matrix<double>::null();
+        if (n <= 0) return Matrix<double>::null();
 
         Matrix<double> out(1, n);
         out.loop([&] (double& x) {
@@ -75,9 +75,9 @@ namespace ejovo {
         return out;
     }
 
-    Matrix<double> rbinom(int n, int size, double p = 0.5) {
+    inline Matrix<double> rbinom(int n, int size, double p = 0.5) {
 
-        if (n == 0) return Matrix<double>::null();
+        if (n <= 0) return Matrix<double>::null();
 
         Matrix<double> out(1, n);
         out.loop([&] (double& x) {
@@ -87,8 +87,20 @@ namespace ejovo {
         return out;
     }
 
+    inline Matrix<bool> rbernoulli(int n, double p = 0.5) {
+
+        if (n <= 0) return Matrix<bool>::null();
+
+        Matrix<bool> out(1, n);
+        out.loop([&] (bool& b) {
+            b = ejovo::rng::xoroshiro.bernouilli(p);
+        });
+
+        return out;
+    }
+
     // random variable of the categorical distribution
-    Matrix<int> rcat(int n, const Matrix<double>& p) {
+    inline Matrix<int> rcat(int n, const Matrix<double>& p) {
 
         if (n == 0) return Matrix<int>::null();
 
@@ -112,7 +124,7 @@ namespace ejovo {
         return ((double) (n_choose_k(K, k) * n_choose_k(N - K, n - k)) / n_choose_k(N, n));
     }
 
-    Matrix<double> rhyper(int n, int ndraws, int N, int K) {
+    inline Matrix<double> rhyper(int n, int ndraws, int N, int K) {
 
         if (n == 0) return Matrix<double>::null();
 
@@ -153,15 +165,15 @@ namespace ejovo {
 
     // Take in discrete bins (for example ejovo::seq(10)) and count
     // the number of times each
-    Matrix<int> histogram_counts_discrete(const Grid1D<int>& obs, const Grid1D<int>& bins) {
+    Matrix<std::size_t> histogram_counts_discrete(const Grid1D<int>& obs, const Grid1D<int>& bins) {
 
         // Traverse through the observations.
-        Matrix<int> counts = Matrix<int>::zeros(1, bins.size());
+        Matrix<std::size_t> counts = Matrix<std::size_t>::zeros(1, bins.size());
 
         // loop through the observations
         obs.loop([&] (const auto& x) {
             // and find the appropriate bin
-            for (int i = 1; i <= bins.size(); i++) {
+            for (std::size_t i = 1; i <= bins.size(); i++) {
                 if (x == bins(i)) {
                     counts(i) ++;
                     break;
@@ -174,7 +186,7 @@ namespace ejovo {
 
     Matrix<double> histogram_freq_discrete(const Matrix<int>& obs, const Matrix<int>& bins) {
 
-        Matrix<int> counts = histogram_counts_discrete(obs, bins);
+        Matrix<std::size_t> counts = histogram_counts_discrete(obs, bins);
         int total = counts.sum();
 
         return counts.map<double>([&] (auto x) { return x / (double) total; });

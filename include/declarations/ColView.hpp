@@ -16,7 +16,7 @@ public:
     int ie;
 
     T& operator[](int i) override;
-    T& operator[](int i) const;
+    const T& operator[](int i) const override;
 
     std::size_t nrow() const override;
     std::size_t ncol() const override;

@@ -43,6 +43,7 @@ Vector<T>& Vector<T>::reset() {
     this->n = 0;
     this->col = true;
     this->data = nullptr;
+    return *this;
 }
 
 /**========================================================================

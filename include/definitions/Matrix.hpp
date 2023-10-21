@@ -181,12 +181,20 @@ Matrix<T>& Matrix<T>::operator=(Matrix&& rhs) {
  *========================================================================**/
 template <class T>
 T& Matrix<T>::operator[](int i) {
-    return (this->data)[i];
+    if (i < 0) {
+        return (this->data)[this->size() + i];
+    } else {
+        return (this->data)[i];
+    }
 }
 
 template <class T>
 const T& Matrix<T>::operator[](int i) const {
-    return (this->data)[i];
+    if (i < 0) {
+        return (this->data)[this->size() + i];
+    } else {
+        return (this->data)[i];
+    }
 }
 
 // extract the specified integers
@@ -237,10 +245,10 @@ const Matrix<T>& Matrix<T>::print() const {
 
     std::cout << this->m << " x " << this->n << " matrix\n";
 
-    for (int i = 1; i <= this->m; i++) {
+    for (std::size_t i = 1; i <= this->m; i++) {
         std::cout << "|";
 
-        for (int j = 1; j < this->n; j++) {
+        for (std::size_t j = 1; j < this->n; j++) {
             std::cout << this->operator()(i, j) << ", ";
         }
 
@@ -382,9 +390,10 @@ Matrix<T>& Matrix<T>::operator%=(const Matrix& rhs) {
 
 template <class T>
 T Matrix<T>::dot(const Matrix& rhs, int i, int j) const {
+
     // we are assuming that the sizes are legit
     T total = 0;
-    for (int k = 1; k <= this->n; k++) {
+    for (std::size_t k = 1; k <= this->n; k++) {
         total += (this->at(i, k) * rhs(k, j));
     }
     return total;
@@ -406,8 +415,8 @@ Matrix<T> Matrix<T>::kronecker_product(const Matrix& rhs) const {
     };
 
     // Equipped with the basics of views, I think I'm ready to tackle this function!
-    for (int i = 1; i < out.m; i += rhs.m) {
-        for (int j = 1; j < out.n; j += rhs.n) {
+    for (std::size_t i = 1; i < out.m; i += rhs.m) {
+        for (std::size_t j = 1; j < out.n; j += rhs.n) {
             set_block(i, j);
             block_rowmaj_pos ++;
         }
@@ -429,8 +438,8 @@ Matrix<T> Matrix<T>::operator*(const Matrix&rhs) const {
     // create output matrix
     Matrix out{this->m, rhs.n};
 
-    for (int i = 1; i <= out.m; i++) {
-        for (int j = 1; j <= out.n; j++) {
+    for (std::size_t i = 1; i <= out.m; i++) {
+        for (std::size_t j = 1; j <= out.n; j++) {
             out(i, j) = this->dot(rhs, i, j);
         }
     }
@@ -638,22 +647,32 @@ Matrix<T> Matrix<T>::hilbert(int n) {
 template <class T>
 Matrix<T>& Matrix<T>::reshape(std::tuple<int, int> ind) {
 
+    if (std::get<0>(ind) < 0 || std::get<1>(ind) < 0) throw std::runtime_error("Cannot reshape Matrix to have negative dimensions");
+
+    std::size_t rows = std::get<0>(ind);
+    std::size_t cols = std::get<1>(ind);
+
     // verify that the first times the second is legitimate
-    if (std::get<0>(ind) * std::get<1>(ind) != this->size()) {
+    if (rows * cols != this->size()) {
         std::cerr << "Sizes not compatible for reshaping. Aborting.\n";
         return *this;
     }
 
-    this->m = std::get<0>(ind);
-    this->n = std::get<1>(ind);
+    this->m = rows;
+    this->n = cols;
     return *this;
 }
 
 template <class T>
 Matrix<T>& Matrix<T>::reshape(int m, int n) {
 
+    if (m < 0 || n < 0) throw std::runtime_error("Cannot reshape Matrix to have negative dimensions");
+
+    std::size_t rows = m;
+    std::size_t cols = n;
+
     // verify that the first times the second is legitimate
-    if (m * n != this->size()) {
+    if (rows * cols != this->size()) {
         std::cerr << "Sizes not compatible for reshaping. Aborting.\n";
         return *this;
     }
@@ -774,7 +793,7 @@ template <class T>
 Matrix<T> Matrix<T>::get_row(int i) const {
     Matrix row_i (1, this->m);
 
-    for (int j = 1; j <= this->m; j++) {
+    for (std::size_t j = 1; j <= this->m; j++) {
         row_i(j) = this->operator()(i, j);
     }
 
@@ -816,7 +835,7 @@ template <class T>
 Matrix<T> Matrix<T>::accumulate(std::function<T(const T&, const T&)> bin_op, T init) const {
     Matrix<T> out (1, this->size());
     out(1) = this->operator()(1);
-    for (int i = 2; i <= out.size(); i++) {
+    for (std::size_t i = 2; i <= out.size(); i++) {
         out(i) = bin_op(out(i - 1), this->operator()(i));
     }
     return out;
@@ -827,7 +846,7 @@ template <class T>
 Matrix<T> Matrix<T>::accumulate(std::function<T(const T&, const T&, int)> ter_op, T init) const {
     Matrix<T> out (1, this->size());
     out(1) = this->operator()(1);
-    for (int i = 2; i <= out.size(); i++) {
+    for (std::size_t i = 2; i <= out.size(); i++) {
         out(i) = ter_op(out(i - 1), this->operator()(i), i);
     }
     return out;
@@ -1185,8 +1204,8 @@ std::tuple<Matrix<T>, Matrix<T>> Matrix<T>::lu() const {
     Matrix L = Matrix<T>::id(this->m);
     Matrix U = this->clone();
 
-    for (int j = 1; j < L.n; j++) {
-        for (int i = j + 1; i <= L.m; i++) {
+    for (std::size_t j = 1; j < L.n; j++) {
+        for (std::size_t i = j + 1; i <= L.m; i++) {
 
             T scalar = U(i, j) / U(j, j);
             U.rows({i}, j) = U.rows({i}, j) - scalar * U.rows({j}, j);

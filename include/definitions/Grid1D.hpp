@@ -158,7 +158,7 @@ bool Grid1D<T>::isnt_same_size(const Grid1D<U>& rhs) const {
 
 template <class T>
 bool Grid1D<T>::is_valid_bound(int i) const {
-    return (i >= 1 && i <= this->size());
+    return (i >= 1 && i <= static_cast<int>(this->size()));
 }
 
 template <class T>
@@ -253,7 +253,7 @@ Grid1D<T>& Grid1D<T>::mutate_if(unary_op f, predicate pred) {
 }
 
 template <class T>
-Grid1D<T>& Grid1D<T>::loop(loop_fn f) {
+inline Grid1D<T>& Grid1D<T>::loop(loop_fn f) {
     const std::size_t n = this->size();
     for (std::size_t i = 1; i <= n; i++) {
         f(this->operator()(i));
@@ -262,7 +262,7 @@ Grid1D<T>& Grid1D<T>::loop(loop_fn f) {
 }
 
 template <class T>
-const Grid1D<T>& Grid1D<T>::loop(loop_fn_const f) const {
+inline const Grid1D<T>& Grid1D<T>::loop(loop_fn_const f) const {
     const std::size_t n = this->size();
     for (std::size_t i = 1; i <= n; i++) {
         f(this->operator()(i));
@@ -271,7 +271,7 @@ const Grid1D<T>& Grid1D<T>::loop(loop_fn_const f) const {
 }
 
 template <class T>
-Grid1D<T>& Grid1D<T>::loop_i(loop_ind_fn f) {
+inline Grid1D<T>& Grid1D<T>::loop_i(loop_ind_fn f) {
     const std::size_t n = this->size();
     for (std::size_t i = 1; i <= n; i++) {
         f(i);
@@ -280,7 +280,7 @@ Grid1D<T>& Grid1D<T>::loop_i(loop_ind_fn f) {
 }
 
 template <class T>
-const Grid1D<T>& Grid1D<T>::loop_i(loop_ind_fn f) const {
+inline const Grid1D<T>& Grid1D<T>::loop_i(loop_ind_fn f) const {
     const std::size_t n = this->size();
     for (std::size_t i = 1; i <= n; i++) {
         f(i);

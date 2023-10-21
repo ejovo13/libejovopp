@@ -64,7 +64,7 @@ Dataframe<T> df(std::initializer_list<Matrix<T>> data, std::initializer_list<std
     std::vector<Matrix<T>> cols;
     std::vector<std::string> col_names;
 
-    int size = data.begin()->size();
+    std::size_t size = data.begin()->size();
 
     for (auto mat : data) {
         if (mat.size() != size) throw "You a dumb bitch";
@@ -86,19 +86,19 @@ bool Dataframe<T>::to_csv(const std::string filename) {
     std::ofstream my_file;
 
     my_file.open(filename);
-    const int ncol = cols.size();
+    const std::size_t ncol = cols.size();
 
-    for (int i = 0; i < ncol - 1; i++) {
+    for (std::size_t i = 0; i < ncol - 1; i++) {
         my_file << col_names.at(i) << ",";
     }
 
     my_file << col_names.at(ncol - 1) << "\n";
 
     // iterate through length of the elements of mat
-    for (int i = 1; i <= nrow; i++) {
+    for (std::size_t i = 1; i <= nrow; i++) {
 
         // Now add a row
-        for (int j = 0; j < ncol - 1; j++) {
+        for (std::size_t j = 0; j < ncol - 1; j++) {
 
             my_file << cols.at(j).at(i) << ",";
         }
@@ -234,6 +234,7 @@ bool contour(Matrix<double> x, Matrix<double> y, Matrix<double> z, std::string f
     remove(r_file.c_str());
     remove(csv_file.c_str());
 
+    return true;
 }
 
 bool contour(Matrix<double> x, Matrix<double> y, std::function<double (double, double)> f, std::string filename = "test", std::string rexp_breaks = "", int width = 5, int height = 5, std::string units = "cm") {
@@ -268,6 +269,7 @@ bool contour(Matrix<double> x, Matrix<double> y, std::function<double (double, d
     // remove(r_file.c_str());
     remove(csv_file.c_str());
 
+    return true;
 }
 
 };

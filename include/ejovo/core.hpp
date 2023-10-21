@@ -415,7 +415,7 @@ T reduce(const Matrix<T>& mat, BinaryFn f, T init = 0) {
 
     T out = mat(1) + init;
 
-    for (int i = 2; i <= mat.size(); i++) {
+    for (std::size_t i = 2; i <= mat.size(); i++) {
         out = f(out, mat(i));
     }
     // loop(mat, [&] (int i) {out = f(out, mat(i));});

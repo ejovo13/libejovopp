@@ -78,11 +78,9 @@ private:
 
     double x0;
     double x1;
-    Level level;
     std::unique_ptr<KdNode2> left;
     std::unique_ptr<KdNode2> right;
-
-
+    Level level;
 
 };
 

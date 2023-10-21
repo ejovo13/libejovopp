@@ -72,7 +72,7 @@ typename Matrix<T>::VecView Matrix<T>::VecView::filter(std::function<bool(T)> f)
 }
 
 template <class T>
-T& Matrix<T>::VecView::operator[](int i) const {
+const T& Matrix<T>::VecView::operator[](int i) const {
     return mat(true_ind[i]);
 }
 

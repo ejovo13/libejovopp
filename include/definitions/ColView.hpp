@@ -62,7 +62,7 @@ T& Matrix<T>::ColView::operator[](int i) {
 }
 
 template <class T>
-T& Matrix<T>::ColView::operator[](int i) const {
+const T& Matrix<T>::ColView::operator[](int i) const {
     return mat(ib + i, j);
 }
 

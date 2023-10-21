@@ -249,9 +249,9 @@ public:
     /**========================================================================
      *!                           Looping Functions
      *========================================================================**/
-    Grid1D& loop(loop_fn f);
-    Grid1D& loop_i(loop_ind_fn f);
-    Grid1D& swap(int ai, int bi);
+    inline Grid1D& loop(loop_fn f);
+    inline Grid1D& loop_i(loop_ind_fn f);
+    inline Grid1D& swap(int ai, int bi);
 
     const Grid1D& loop(loop_fn_const f) const;
     const Grid1D& loop_i(loop_ind_fn f) const;

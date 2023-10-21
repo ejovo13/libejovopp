@@ -68,7 +68,7 @@ std::size_t Matrix<T>::RowView::ncol() const {
 }
 
 template <class T>
-T& Matrix<T>::RowView::operator[](int __i) const {
+const T& Matrix<T>::RowView::operator[](int __i) const {
     return mat(i, jb + __i);
 }
 

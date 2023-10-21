@@ -22,7 +22,7 @@ public:
     std::string to_string() const override;
     Matrix& matrix() const override;
 
-    T& operator[] (int i) const override;
+    const T& operator[] (int i) const override;
     T& operator[] (int i) override;
 
     using AbsView::operator=;
