@@ -1,12 +1,67 @@
 site_name: Libejovopp
 
-site_description: High level API for libejovopp
+site_description: High Level API for Libejovopp
 site_author: Evan Voyles
 
-# repo_url: https://github.com/ejovo13/libejovopp
+repo_url: https://github.com/ejovo13/libejovopp
 
 theme:
-  # name: mkdocs
-  name: readthedocs
-  # nav_style: dark
-  hljs_style: monokai
+  features:
+    - content.code.copy
+    - content.code.annotate
+
+  name: material
+  palette:
+    scheme: default
+    primary: black
+  icon:
+  admonition:
+    note: simple/meteor
+    abstract: octicons/checklist-16
+    info: octicons/info-16
+    tip: octicons/squirrel-16
+    success: octicons/check-16
+    question: octicons/question-16
+    warning: simple/meteor
+    failure: octicons/x-circle-16
+    danger: octicons/zap-16
+    bug: octicons/bug-16
+    example: octicons/beaker-16
+    quote: octicons/quote-16
+
+markdown_extensions:
+  - footnotes
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences:
+      custom_fences:
+            - name: mermaid
+              class: mermaid
+              format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: 'index.md'
+  - EPU-N9-MAO:
+    - 'Optimisation Combinatoire': opti/opti.md
+    - 'Resources': opti/course_material.md
+    - 'Worked Exercises': opti/corrections.md
+    - 'Appendix':
+      - 'Computational Complexity': opti/complexity.md
+      - 'Graph Theory': opti/graph_theory.md
