@@ -3,7 +3,7 @@
 
 
 [![Ubuntu](https://github.com/ejovo13/libejovopp/actions/workflows/Ubuntu.yml/badge.svg)](https://github.com/ejovo13/libejovopp/actions/workflows/Ubuntu.yml)
-[![Documentation Status](https://readthedocs.org/projects/libejovo/badge/?version=latest)](https://libejovo.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/libejovopp/badge/?version=latest)](https://libejovopp.readthedocs.io/en/latest/?badge=latest)
 
 
 # Libejovocpp
