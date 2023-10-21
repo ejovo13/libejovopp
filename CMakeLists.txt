@@ -29,7 +29,7 @@ set(PROJ_SRC ${PROJECT_SOURCE_DIR}/src)
 target_include_directories(matrix++ INTERFACE ${PROJ_INC})
 add_compile_options(-Wno-narrowing)
 add_compile_options($<$<CONFIG:Release>:-O3>)
-add_compile_options(-Wall)
+add_compile_options(-Wall -Wunused-result)
 # add_compile_options(-fconcepts) # What the fuck is this man, this is not portable
 # add_compile_options(-std=c++2a) # AHHHHHH
 # add_subdirectory(sciplot)
