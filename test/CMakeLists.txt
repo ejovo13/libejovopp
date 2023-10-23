@@ -20,6 +20,7 @@ endmacro()
 
 add_exe(t_hello)
 add_exe(benchmarks)
+add_exe(benchmarks_omp)
 
 
 macro(add_test file_name)

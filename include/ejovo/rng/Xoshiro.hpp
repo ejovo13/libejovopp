@@ -5,6 +5,7 @@
 #include <sys/random.h>
 #include <climits>
 #include <cmath>
+#include <iostream>
 #include "types.hpp"
 
 namespace ejovo {
@@ -43,7 +44,17 @@ namespace ejovo {
             template <class T> inline std::size_t categorical(const Grid1D<T>& p); // return an integer i from 1 to k representing the category of the p(i)
             std::size_t categorical(std::vector<double> p); // For now we will assume that the probabilites are not sorted.
 
+            friend std::ostream& operator<<(std::ostream &out, Xoshiro& rhs) {
 
+                auto state = rhs.state;
+                auto s0 = state[0];
+                auto s1 = state[1];
+                auto s2 = state[2];
+                auto s3 = state[3];
+
+                out << "Xoshiro generator with state: {" << s0 << ", " << s1 << ", " << s2 << ", " << s3 << "}";
+                return out;
+            }
 
         };
 

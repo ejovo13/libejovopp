@@ -4,6 +4,7 @@
 
 #include "ejovo/rng/Xoshiro.hpp"
 #include "ejovo/rng/rng.hpp"
+#include "ejovo/rng/openmp.hpp"
 #include "ejovo/core.hpp"
 #include "ejovo/diffyq.hpp"
 #include "ejovo/discrete.hpp"
