@@ -46,11 +46,11 @@ Matrix<T>::RowView::RowView(RowView&& rv)
 };
 // deconstruct rv??
 
-template <class T>
-typename Matrix<T>::RowView& Matrix<T>::RowView::operator=(const RowView& rv) {
-    this->assign(rv, ejovo::id_eq<T, T>);
-    return *this;
-}
+// template <class T>
+// typename Matrix<T>::RowView& Matrix<T>::RowView::operator=(const RowView& rv) {
+//     this->assign(rv, ejovo::id_eq<T, T>);
+//     return *this;
+// }
 
 template <class T>
 std::string Matrix<T>::RowView::to_string() const {

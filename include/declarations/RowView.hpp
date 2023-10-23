@@ -24,7 +24,7 @@ public:
 
     using AbsView::operator=;
     using Grid1D<T>::operator=;
-    RowView& operator=(const RowView&);
+    // RowView& operator=(const RowView&);
 
     RowView(Matrix& mat, int i);
     RowView(Matrix& mat, int i, int jb);

@@ -1,4 +1,4 @@
-#include "libejovo.hpp"
+// #include "libejovo.hpp"
 
-template class ejovo::Matrix<double>;
-template class ejovo::Matrix<float>;
+// template class ejovo::Matrix<double>;
+// template class ejovo::Matrix<float>;

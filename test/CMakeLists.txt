@@ -14,7 +14,7 @@
 macro (add_exe file_name)
 
     add_executable(${file_name} ${file_name}.cpp)
-    target_link_libraries(${file_name} PUBLIC matrix++)
+    target_link_libraries(${file_name} PUBLIC ejovopp)
 
 endmacro()
 

@@ -58,10 +58,4 @@ extra_javascript:
 
 nav:
   - Home: 'index.md'
-  - EPU-N9-MAO:
-    - 'Optimisation Combinatoire': opti/opti.md
-    - 'Resources': opti/course_material.md
-    - 'Worked Exercises': opti/corrections.md
-    - 'Appendix':
-      - 'Computational Complexity': opti/complexity.md
-      - 'Graph Theory': opti/graph_theory.md
+  -

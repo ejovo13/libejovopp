@@ -3,7 +3,7 @@
 Libejovopp is the successor to Libejovo, now being rewritten and
 refactored into C++
 
-C is a very restrictive language and I was tired of having my hands tied behind my back.
+This library is a synthesis of some of the core concepts that I acquired during my Master's degree.
 
 # Tutorial
 

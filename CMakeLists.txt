@@ -30,23 +30,6 @@ target_include_directories(matrix++ INTERFACE ${PROJ_INC})
 add_compile_options(-Wno-narrowing)
 add_compile_options($<$<CONFIG:Release>:-O3>)
 add_compile_options(-Wall -Wunused-result)
-# add_compile_options(-fconcepts) # What the fuck is this man, this is not portable
-# add_compile_options(-std=c++2a) # AHHHHHH
-# add_subdirectory(sciplot)
-# include_directories(sciplot)
-# include_directories(matplotplusplus/source/matplot/util)
-# include_directories(matplotlib-cpp)
-# include_directories(/usr/include/python3.10)
-# include_directories(/usr/lib/python3.10/site-packages/numpy/core/include/)
 
-# add_library(pyth3 INTERFACE)
-# target_link_libraries(pyth3 INTERFACE crypt dl m)
-
-# add_subdirectory(matplotlib-cpp)
-# add_subdirectory(matplotplusplus)
-add_subdirectory(${PROJ_TEST})
 add_subdirectory(${PROJ_SRC})
-
-
-# add_executable(t_abs_view t_AbsView.cpp)
-# target_link_libraries(t_abs_view matrix++)
+add_subdirectory(${PROJ_TEST})
