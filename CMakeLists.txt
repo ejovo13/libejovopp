@@ -7,10 +7,11 @@ project(libejovo++)
 include(FindPNG)
 include(FindGnuplot)
 include(GNUInstallDirs)
+include(FindOpenMP)
+include(GoogleTest)
 
 find_package(GTest)
 
-include(GoogleTest)
 
 enable_testing(ON)
 
@@ -21,6 +22,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 add_library(matrix++ INTERFACE)
+
+if (OpenMP_FOUND)
+    message("=== OpenMP Enabled!")
+    message("=== OpenMP flags: ${OpenMP_CXX_FLAGS}")
+    add_compile_definitions(WITH_OPENMP)
+    target_compile_options(matrix++ INTERFACE ${OpenMP_CXX_FLAGS})
+    target_link_options(matrix++ INTERFACE ${OpenMP_CXX_FLAGS})
+    # add_compile_options(${OpenMP_CXX_FLAGS})
+endif()
 
 set(PROJ_INC ${PROJECT_SOURCE_DIR}/include)
 set(PROJ_TEST ${PROJECT_SOURCE_DIR}/test)
